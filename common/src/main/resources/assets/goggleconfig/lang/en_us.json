@@ -1,0 +1,7 @@
+{
+  "text.autoconfig.goggleplacement.title": "Goggle Placement Config",
+  "text.autoconfig.goggleplacement.option.disabledMovingGogglesWithHelmet": "Disable Moving Goggles With Helmet",
+  "text.autoconfig.goggleplacement.option.disabledMovingGogglesWithHelmet.@Tooltip": "Disables Goggles moving down when wearing a Helmet.",
+  "text.autoconfig.goggleplacement.option.gogglePossition": "Goggle Placement (with wearing a Helmet)",
+  "text.autoconfig.goggleplacement.option.gogglePossition.@Tooltip": "Best values from -0.35 to -0.1 (default create value: -0.25)"
+}

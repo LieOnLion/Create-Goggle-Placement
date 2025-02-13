@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.lieonlion.goggleplacement.fabric.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+  ],
+  "mixins": [
+    "GoggleTrinketRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

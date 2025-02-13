@@ -1,0 +1,113 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    forge {
+        convertAccessWideners = true
+//        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+repositories {
+    maven { url = "https://maven.theillusivec4.top/" }
+}
+
+dependencies {
+    forge("net.minecraftforge:forge:$minecraft_version-$forge_version")
+    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    // Create and its dependencies
+    modImplementation("com.simibubi.create:create-$minecraft_version:$create_forge_version:slim") { transitive = false }
+    modImplementation("com.tterrag.registrate:Registrate:$registrate_forge_version")
+    modImplementation("com.jozufozu.flywheel:flywheel-forge-$flywheel_forge_minecraft_version:$flywheel_forge_version")
+
+    // MixinExtras
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:0.4.1"))
+
+    // Cloth Config
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}")
+    // Curios
+    modLocalRuntime("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+
+    // Development QOL
+    modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
+}
+
+processResources {
+    // set up properties for filling into metadata
+    Map<String, Object> properties = [
+            "mod_id": mod_id,
+            "mod_name": mod_name,
+            "mod_version": mod_version,
+            "mod_license": mod_license,
+            "mod_authors": mod_authors,
+            "mod_description": mod_description,
+            "forge_version": forge_version.split("\\.")[0], // only specify major version of forge
+            "minecraft_version": minecraft_version,
+            "create_version": create_forge_version.split("-")[0] // cut off build number
+    ]
+    inputs.properties(properties)
+
+    filesMatching("META-INF/mods.toml") {
+        expand properties
+    }
+}
+
+loom {
+    forge {
+        mixinConfig(
+                "goggleplacement.mixins.json"
+        )
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+jar {
+    archiveClassifier = "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
