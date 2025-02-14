@@ -1,35 +1,16 @@
 package dev.lieonlion.goggleplacement.config;
 
-import dev.lieonlion.goggleplacement.GogglePlacement;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.minecraft.client.gui.screens.Screen;
+import eu.midnightdust.lib.config.MidnightConfig;
 
-@Config(name = GogglePlacement.MOD_ID)
-public class GpConfig implements ConfigData, GpUtil {
-    @ConfigEntry.Gui.Tooltip
-    public boolean disabledMovingGogglesWithHelmet = DEFAULT.disabledMovingGogglesWithHelmet();
-    @ConfigEntry.Gui.Tooltip
-    public double gogglePossition = DEFAULT.gogglePossition();
+public class GpConfig extends MidnightConfig {
+    @Comment(centered = true) public static Comment woh;
+    @Entry(isSlider = true, min = -0.5, max = 0.5) public static double wohGogglePlacement = 0.5;
+    @Entry public static boolean wohFlipUpsideDown = false;
+    @Entry public static boolean wohHideGoggles = false;
 
-    @Override
-    public boolean disabledMovingGogglesWithHelmet() {
-        return disabledMovingGogglesWithHelmet;
-    }
-
-    @Override
-    public double gogglePossition() {
-        return gogglePossition;
-    }
-
-    public static GpConfig createConfig() {
-        return AutoConfig.register(GpConfig.class, GsonConfigSerializer::new).getConfig();
-    }
-
-    public static Screen createConfigScreen(Screen parent) {
-        return AutoConfig.getConfigScreen(GpConfig.class, parent).get();
-    }
+    @Comment(centered = true) public static Comment wh;
+    @Entry public static boolean whDisableGogglesMovingDown = true;
+    @Entry(isSlider = true, min = -0.5, max = 0.5) public static double whGogglePlacement = 0.0;
+    @Entry public static boolean whFlipUpsideDown = false;
+    @Entry public static boolean whHideGoggles = false;
 }

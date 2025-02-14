@@ -31,3 +31,10 @@ license = "${mod_license}"
     versionRange="${create_version}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="midnightlib"
+    mandatory=true
+    versionRange="*"
+    ordering="NONE"
+    side="CLIENT"

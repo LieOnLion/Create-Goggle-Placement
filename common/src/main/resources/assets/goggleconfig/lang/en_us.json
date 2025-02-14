@@ -1,7 +1,14 @@
 {
-  "text.autoconfig.goggleplacement.title": "Goggle Placement Config",
-  "text.autoconfig.goggleplacement.option.disabledMovingGogglesWithHelmet": "Disable Moving Goggles With Helmet",
-  "text.autoconfig.goggleplacement.option.disabledMovingGogglesWithHelmet.@Tooltip": "Disables Goggles moving down when wearing a Helmet.",
-  "text.autoconfig.goggleplacement.option.gogglePossition": "Goggle Placement (with wearing a Helmet)",
-  "text.autoconfig.goggleplacement.option.gogglePossition.@Tooltip": "Best values from -0.35 to -0.1 (default create value: -0.25)"
+  "goggleplacement.midnightconfig.title": "Create: Goggle Placement",
+
+  "goggleplacement.midnightconfig.woh": "Without a Helmet (Worn)",
+  "goggleplacement.midnightconfig.wohGogglePlacement": "Goggle Placement",
+  "goggleplacement.midnightconfig.wohFlipUpsideDown": "Flip Goggles Upside-down",
+  "goggleplacement.midnightconfig.wohHideGoggles": "Hide Goggles (Disable Renderer)",
+
+  "goggleplacement.midnightconfig.wh": "With a Helmet (Worn)",
+  "goggleplacement.midnightconfig.whDisableGogglesMovingDown": "Disable Goggles moving down when wearing a Helmet",
+  "goggleplacement.midnightconfig.whGogglePlacement": "Goggle Placement",
+  "goggleplacement.midnightconfig.whFlipUpsideDown": "Flip Goggles Upside-down",
+  "goggleplacement.midnightconfig.whHideGoggles": "Hide Goggles (Disable Renderer)"
 }
