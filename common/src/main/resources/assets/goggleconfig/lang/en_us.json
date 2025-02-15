@@ -1,9 +1,8 @@
 {
   "goggleplacement.midnightconfig.title": "Create: Goggle Placement",
 
-  "goggleplacement.midnightconfig.woh": "Without a Helmet (Worn)",
+  "goggleplacement.midnightconfig.woh": "Without a Helmet",
   "goggleplacement.midnightconfig.wohGogglePlacement": "Goggle Placement",
-  "goggleplacement.midnightconfig.wohFlipUpsideDown": "Flip Goggles Upside-down",
   "goggleplacement.midnightconfig.wohHideGoggles": "Hide Goggles (Disable Renderer)",
 
   "goggleplacement.midnightconfig.wh": "With a Helmet (Worn)",

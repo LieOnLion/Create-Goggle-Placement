@@ -38,17 +38,11 @@ public abstract class GoggleTrinketRendererMixin {
     // Helmet Off (woh)
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
     private void wohGogglePlacement(PoseStack instance, double d, double e, double f, Operation<Void> original) {
-        boolean flip = GpConfig.wohFlipUpsideDown;
         instance.translate(
                 d,
-                (flip ? -0.39 : 0) - ((GpConfig.wohGogglePlacement - 0.5) / 2),
+                0 - ((GpConfig.wohGogglePlacement - 0.5) / 2),
                 f
         );
-    }
-
-    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Axis;rotationDegrees(F)Lorg/joml/Quaternionf;", ordinal = 0))
-    private Quaternionf wohFlipUpsideDown(Axis instance, float f, Operation<Quaternionf> original) {
-        return instance.rotationDegrees(180f * (GpConfig.wohFlipUpsideDown ? 2 : 1));
     }
 
     // Helmet On (wh)
