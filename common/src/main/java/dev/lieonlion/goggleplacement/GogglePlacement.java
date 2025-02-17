@@ -11,7 +11,7 @@ public class GogglePlacement {
     public static final String NAME = "Create: Goggle Placement";
     public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 
-    public static void init() {
+    public static void clientInit() {
         LOGGER.info("{} initializing!", NAME);
         MidnightConfig.init(MOD_ID, GpConfig.class);
     }

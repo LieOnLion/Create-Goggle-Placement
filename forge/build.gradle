@@ -65,6 +65,7 @@ processResources {
             "mod_license": mod_license,
             "mod_authors": mod_authors,
             "mod_description": mod_description,
+            "link_issues": link_issues,
             "forge_version": forge_version.split("\\.")[0], // only specify major version of forge
             "minecraft_version": minecraft_version,
             "create_version": create_forge_version.split("-")[0] // cut off build number

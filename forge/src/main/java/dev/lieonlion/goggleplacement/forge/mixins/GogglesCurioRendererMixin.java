@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,11 +23,21 @@ import top.theillusivec4.curios.api.SlotContext;
 
 @Mixin(GogglesCurioRenderer.class)
 public class GogglesCurioRendererMixin {
+    @Unique boolean create_goggle_placement$isHeadOccupied;
+
+    @Unique
+    private static boolean create_goggle_placement$headOccupied(LivingEntity entity) {
+        return !entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty() && !GpConfig.whDisableGogglesMovingDown;
+    }
+
     // Both
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true, remap = false)
     private <T extends LivingEntity, M extends EntityModel<T>> void hideGoggles(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
-        boolean headOccupied = !slotContext.entity().getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-        if ((GpConfig.whHideGoggles && headOccupied) || (GpConfig.wohHideGoggles && !headOccupied)) {
+        create_goggle_placement$isHeadOccupied = create_goggle_placement$headOccupied(slotContext.entity());
+        if (
+            ((GpConfig.whHideGoggles || GpConfig.whDisableGogglesMovingDown) && create_goggle_placement$isHeadOccupied) ||
+            (GpConfig.wohHideGoggles && !create_goggle_placement$isHeadOccupied)
+        ) {
             ci.cancel();
         }
     }
@@ -34,17 +45,20 @@ public class GogglesCurioRendererMixin {
     // Helmet Off (woh)
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 1))
     private void wohGogglePlacement(PoseStack instance, double d, double e, double f, Operation<Void> original) {
-        instance.translate(
-                d,
-                -0.25 - ((GpConfig.wohGogglePlacement - 0.5) / 2),
-                f
+        original.call(
+            instance,
+            d,
+            create_goggle_placement$isHeadOccupied ?
+                e :
+                e - ((GpConfig.wohGogglePlacement - 0.5) / 2),
+            f
         );
     }
 
     // Helmet On (wh)
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"))
     private boolean whDisabledGogglesMovingDown(boolean original) {
-        return original || GpConfig.whDisableGogglesMovingDown;
+        return !create_goggle_placement$isHeadOccupied;
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 2))

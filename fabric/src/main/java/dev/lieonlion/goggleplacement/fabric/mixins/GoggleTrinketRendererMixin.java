@@ -15,12 +15,15 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GoggleTrinketRenderer.class)
 public abstract class GoggleTrinketRendererMixin {
+    @Unique boolean create_goggle_placement$isHeadOccupied;
+
     @Shadow
     public static boolean headOccupied(LivingEntity entity) {
         return false;
@@ -29,8 +32,11 @@ public abstract class GoggleTrinketRendererMixin {
     // Both
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     private void hideGoggles(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> model, PoseStack matrices, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch, CallbackInfo ci) {
-        boolean headOccupied = headOccupied(entity);
-        if ((GpConfig.whHideGoggles && headOccupied) || (GpConfig.wohHideGoggles && !headOccupied)) {
+        create_goggle_placement$isHeadOccupied = headOccupied(entity);
+        if (
+            (GpConfig.whHideGoggles && create_goggle_placement$isHeadOccupied) ||
+            (GpConfig.wohHideGoggles && !create_goggle_placement$isHeadOccupied)
+        ) {
             ci.cancel();
         }
     }
@@ -38,10 +44,13 @@ public abstract class GoggleTrinketRendererMixin {
     // Helmet Off (woh)
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(DDD)V", ordinal = 0))
     private void wohGogglePlacement(PoseStack instance, double d, double e, double f, Operation<Void> original) {
-        instance.translate(
-                d,
-                0 - ((GpConfig.wohGogglePlacement - 0.5) / 2),
-                f
+        original.call(
+            instance,
+            d,
+            create_goggle_placement$isHeadOccupied ?
+                e :
+                e - ((GpConfig.wohGogglePlacement - 0.5) / 2),
+            f
         );
     }
 

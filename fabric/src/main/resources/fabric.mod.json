@@ -8,14 +8,15 @@
     "${mod_authors}"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "${link_homepage}",
+    "sources": "${link_sources}",
+    "issues": "${link_issues}"
   },
   "license": "${mod_license}",
   "icon": "icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "dev.lieonlion.goggleplacement.fabric.GogglePlacementFabric"
     ],
     "modmenu": [
